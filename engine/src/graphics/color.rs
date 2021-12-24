@@ -42,7 +42,7 @@ impl Color {
 
     pub fn from_hex(hex: &str) -> Result<Self, Box<dyn std::error::Error>> {
         let upper = &hex[1..].to_uppercase();
-        let mut chars = upper.chars().skip(1);
+        let mut chars = upper.chars();
 
         let r = Self::next_two(&mut chars)?;
         let g = Self::next_two(&mut chars)?;

@@ -1,4 +1,4 @@
-use super::graphics::backend::State;
+use super::graphics::State;
 use super::keyboard::Keyboard;
 use super::resource::ResourceManager;
 use super::audio::Audio;

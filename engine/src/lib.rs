@@ -41,7 +41,6 @@ use audio::Audio;
 use context::Context;
 pub mod graphics;
 mod keyboard;
-pub use graphics::frontend;
 use image::GenericImageView;
 use resource::ResourceManager;
 pub use rodio;
@@ -153,7 +152,7 @@ impl ContextBuilder {
         });
 
         // Init [`wgpu`]
-        let graphics = futures::executor::block_on(graphics::backend::State::new(&window));
+        let graphics = futures::executor::block_on(graphics::State::new(&window));
         // Init keyboard controller
         let keyboard = keyboard::Keyboard::new();
 

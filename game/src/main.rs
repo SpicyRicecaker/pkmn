@@ -1,4 +1,4 @@
-use engine::frontend::color::Color;
+use engine::graphics::color::Color;
 use engine::{context::Context, Runnable};
 
 fn main() {
@@ -13,6 +13,9 @@ fn main() {
 
     let texture1 = std::fs::read("game/res/floor.png").unwrap();
 
+
+
+
     engine::main::run(event_loop, ctx, game);
 }
 
@@ -26,13 +29,14 @@ impl Runnable for Game {
         self.playerx += 1.0;
         self.playery += 1.0;
     }
+
     fn render(&self, ctx: &mut Context) {
         ctx.graphics
             .clear_background(Color::from_hex("#000000").unwrap());
         ctx.graphics.draw_square(
             self.playerx,
             self.playery,
-            1.0,
+            100.0,
             Color::from_hex("#FFFFFF").unwrap(),
         );
     }
