@@ -1,56 +1,59 @@
-use std::collections::HashMap;
-
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub struct Color {
-    pub r: u32,
-    pub g: u32,
-    pub b: u32,
-    pub a: u32,
+    pub r: u8,
+    pub g: u8,
+    pub b: u8,
+    pub a: u8,
 }
 
 impl Color {
-    pub fn from_rgb(r: u32, g: u32, b: u32, a: u32) -> Self {
+    pub fn from_rgb(r: u8, g: u8, b: u8, a: u8) -> Self {
         Color { r, g, b, a }
     }
 
-    pub fn from_hex(hex: &str) -> Result<Self, Box<dyn std::error::Error>> {
-        let mut include_alpha = false;
-        // Have to convert to upper, as well as ensure len
-        match hex.len() {
-            6 => {}
-            8 => include_alpha = true,
-            _ => return Err("Hex is not of proper length".into()),
+    fn is_valid(c: char) -> Option<u8> {
+        match c {
+            '0' => Some(0),
+            '1' => Some(1),
+            '2' => Some(2),
+            '3' => Some(3),
+            '4' => Some(4),
+            '5' => Some(5),
+            '6' => Some(6),
+            '7' => Some(7),
+            '8' => Some(8),
+            '9' => Some(9),
+            'A' => Some(10),
+            'B' => Some(11),
+            'C' => Some(12),
+            'D' => Some(13),
+            'E' => Some(14),
+            'F' => Some(15),
+            _ => None,
         }
-        let keys = [
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
-        ];
-        let map: HashMap<char, u32> = keys
-            .iter()
-            .enumerate()
-            .map(|(i, c)| (c.to_owned(), i as u32))
-            .collect();
+    }
 
-        let upper = hex.to_uppercase();
+    fn next_two(chars: &mut std::str::Chars) -> Result<u8, Box<dyn std::error::Error>> {
+        Ok(
+            Self::is_valid(chars.next().unwrap()).ok_or("invalid character")? * 16
+                + Self::is_valid(chars.next().unwrap()).ok_or("invalid character")?,
+        )
+    }
 
-        let mut iter = upper.chars();
+    pub fn from_hex(hex: &str) -> Result<Self, Box<dyn std::error::Error>> {
+        let upper = &hex[1..].to_uppercase();
+        let mut chars = upper.chars();
 
-        let mut next_two = || -> Result<u32, Box<dyn std::error::Error>> {
-            Ok(
-                map.get(&iter.next().unwrap()).ok_or("invalid character")? * 16
-                    + map.get(&iter.next().unwrap()).ok_or("invalid character")?,
-            )
-        };
-
-        let r = next_two()?;
-        let g = next_two()?;
-        let b = next_two()?;
-        let a = if include_alpha { next_two()? } else { 256 };
+        let r = Self::next_two(&mut chars)?;
+        let g = Self::next_two(&mut chars)?;
+        let b = Self::next_two(&mut chars)?;
+        let a = Self::next_two(&mut chars).unwrap_or(255);
 
         Ok(Color { r, g, b, a })
     }
 
     pub fn fade(mut self, alpha: f32) -> Self {
-        self.a = (alpha * 256.0).floor() as u32;
+        self.a = (alpha * 256.0).floor() as u8;
         self
     }
 }
@@ -88,7 +91,7 @@ mod test {
                 r: 41,
                 g: 40,
                 b: 40,
-                a: 256
+                a: 255
             }
         );
     }

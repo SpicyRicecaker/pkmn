@@ -669,6 +669,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e78d4f1cc4ae33bbfc157ed5d5a5ef3bc29227303d595861deb238fcec4e9457"
 
 [[package]]
+name = "engine"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bytemuck",
+ "cgmath",
+ "env_logger",
+ "futures",
+ "image",
+ "log",
+ "rodio",
+ "wgpu",
+ "wgpu_glyph",
+ "winit",
+]
+
+[[package]]
 name = "env_logger"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -803,6 +820,9 @@ dependencies = [
 [[package]]
 name = "game"
 version = "0.1.0"
+dependencies = [
+ "engine",
+]
 
 [[package]]
 name = "getrandom"
@@ -2006,23 +2026,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
-]
-
-[[package]]
-name = "thomas"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "bytemuck",
- "cgmath",
- "env_logger",
- "futures",
- "image",
- "log",
- "rodio",
- "wgpu",
- "wgpu_glyph",
- "winit",
 ]
 
 [[package]]
