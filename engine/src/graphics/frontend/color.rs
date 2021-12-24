@@ -33,16 +33,16 @@ impl Color {
         }
     }
 
-    fn next_two(chars: &mut std::str::Chars) -> Result<u8, Box<dyn std::error::Error>> {
+    fn next_two(chars: &mut dyn Iterator<Item = char>) -> Result<u8, Box<dyn std::error::Error>> {
         Ok(
-            Self::is_valid(chars.next().unwrap()).ok_or("invalid character")? * 16
-                + Self::is_valid(chars.next().unwrap()).ok_or("invalid character")?,
+            Self::is_valid(chars.next().ok_or("invalid")?).ok_or("invalid character")? * 16
+                + Self::is_valid(chars.next().ok_or("invalid")?).ok_or("invalid character")?,
         )
     }
 
     pub fn from_hex(hex: &str) -> Result<Self, Box<dyn std::error::Error>> {
         let upper = &hex[1..].to_uppercase();
-        let mut chars = upper.chars();
+        let mut chars = upper.chars().skip(1);
 
         let r = Self::next_two(&mut chars)?;
         let g = Self::next_two(&mut chars)?;
